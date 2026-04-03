@@ -128,9 +128,11 @@ func processArchive(path string) {
 }
 
 func main() {
-	if len(os.Args) < 2 { exitWithMessage("Usage: cbrfil [file|dir...]", nil) }
+	length := len(os.Args[1:])
 
-	for _, path := range os.Args[1:] {
+	if length == 0 { exitWithMessage("Usage: cbrfil [file|dir...]", nil) }
+
+	for i, path := range os.Args[1:] {
 		stat, err := os.Stat(path)
 		if errors.Is(err, os.ErrNotExist) { exitWithMessage("File does not exist", err) }
 		if stat.IsDir() {
@@ -144,5 +146,7 @@ func main() {
 		} else {
 			processArchive(path)
 		}
+
+		fmt.Printf("cbrfil: Proccessed %d/%d\n", i+1, length)
 	}
 }
